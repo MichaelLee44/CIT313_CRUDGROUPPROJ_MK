@@ -2,6 +2,7 @@ import { Router } from 'express';
 import {
   getAllProducts, getProductDetails,
 } from '../controllers/productController.js';
+import { validateContact, saveContactMessage } from '../controllers/contactController.js';
 
 const router = Router();
 
@@ -25,7 +26,16 @@ router.get('/contact', (req, res) => {
 });
 
 router.post('/contact', async (req, res) => {
- 
+  const { values, errors } = validateContact(req.body);
+  if (Object.keys(errors).length > 0) {
+    // Show the form again with the errors and what they typed
+    return res.status(422).render('pages/contact', {
+      title: 'Contact', values, errors, sent: false,
+    });
+  }
+  await saveContactMessage(values);
+  // Redirect so refreshing the page doesn't send the form twice
+  res.redirect(303, '/contact?sent=1');
 });
 
 // Used by the Price & Availability button
@@ -34,6 +44,9 @@ router.get('/api/products/:id', async (req, res) => {
   if (!Number.isInteger(id) || id < 1) {
     return res.status(400).json({ error: 'Product id must be a positive whole number.' });
   }
+  const details = await getProductDetails(id);
+  if (!details) return res.status(404).json({ error: 'Product not found.' });
+  res.json(details);
 });
 
 export default router;

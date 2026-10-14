@@ -1,4 +1,4 @@
-import { getDbConnection } from '../IN-Ventory-main/database.js';
+import { getDbConnection } from '../database.js';
 
 // Turns the quantity into the text shown in the pop-up
 export const availabilityFor = (qty) => {

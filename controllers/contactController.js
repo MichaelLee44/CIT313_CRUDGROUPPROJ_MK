@@ -1,4 +1,4 @@
-import { getDbConnection } from '../IN-Ventory-main/database.js';
+import { getDbConnection } from '../database.js';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const LIMITS = { name: 80, email: 120, message: 1000 };
